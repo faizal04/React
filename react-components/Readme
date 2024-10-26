@@ -1,0 +1,12 @@
+This React project showcases the use of components to build a dynamic user interface. 
+It demonstrates how to effectively transfer JSON data between different components, allowing for organized and modular code structure.
+
+Key Features
+Component-Based Architecture: The application is structured using multiple components, each responsible for a specific part of the UI. This promotes reusability and easier maintenance.
+Data Transfer: JSON data is transferred seamlessly from one component to another, illustrating how data can be passed as props and managed within the component hierarchy.
+Dynamic Rendering: The application updates dynamically based on the data received, providing a responsive user experience.
+
+Technologies Used
+React
+JavaScript
+JSON
