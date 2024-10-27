@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.button {
+    height: 3.5rem;
+    width: 11rem;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2.5rem;
+    overflow: hidden;
+    font-family: monospace;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: #ffffff;
+    background-color: #1f2937;
+    /* gray-800 */
+    border-radius: 0.5rem;
+    text-decoration: none;
+}
+
+.button-bg {
+    position: absolute;
+    width: 0;
+    height: 0;
+    transition: all 0.5s ease-out;
+    background-color: #22c55e;
+    /* green-500 */
+    border-radius: 50%;
+}
+
+.button:hover .button-bg {
+    width: 11.2rem;
+    height: 14rem;
+}
+
+.button-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin-top: -0.25rem;
+    border-radius: 0.5rem;
+    opacity: 0.3;
+    background: linear-gradient(to bottom, transparent, transparent, #374151);
+    /* gray-700 */
+}
+
+.button-text {
+    position: relative;
+    font-weight: bold;
+}
