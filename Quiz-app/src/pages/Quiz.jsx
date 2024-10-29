@@ -11,7 +11,9 @@ const Quiz = () => {
             question,
             options: [...options]
         };
-
+        const check = function () {
+            console.log("hellow world bhai kal kro ga 2 din sai code nhi kiya har roz")
+        }
         setQuizData([...quizData, newQuestion]);
         setQuestion(''); // Clear input after saving
         setOptions(['', '', '', '']);
@@ -59,3 +61,6 @@ const Quiz = () => {
 };
 
 export default Quiz;
+
+
+// WILL DO TOMORROW 
