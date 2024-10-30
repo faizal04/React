@@ -4,26 +4,29 @@ import { Link } from 'react-router-dom';
 const Quiz = () => {
     const [question, setQuestion] = useState('');
     const [options, setOptions] = useState(['', '', '', '']);
-    const [quizData, setQuizData] = useState([]); // Array to store all questions and options
+    const [quizData, setQuizData] = useState([]);
+    const [displayhead, setdisplayhead] = useState("CREATE-QUIZ")
 
     const handleSaveQuestion = () => {
         const newQuestion = {
             question,
             options: [...options]
         };
-        const check = function () {
-            console.log("hellow world bhai kal kro ga 2 din sai code nhi kiya har roz")
-        }
+
         setQuizData([...quizData, newQuestion]);
-        setQuestion(''); // Clear input after saving
+        setQuestion('');
         setOptions(['', '', '', '']);
-        console.log(quizData); // Check saved questions in the console
+        console.log(quizData);
     };
+    const exitprocess = () => {
+        localStorage.setItem("quizdata", JSON.stringify(quizData));
+        setdisplayhead('lets see how much you know about {props.username}');
+    }
 
     return (
         <div className="h-screen w-full flex items-center justify-center bg-gradient-to-r from-cyan-500 to-blue-500">
             <div className="h- w-1/2 cursor-default shadow-2xl shadow-blue-900 p-11 flex justify-around flex-col">
-                <h1 className="text-2xl font-bold underline">Create Quiz</h1>
+                <h1 className="text-2xl font-bold underline">{displayhead}</h1>
                 <div className="h-72 flex flex-col gap-6 mt-6 mb-6">
 
 
@@ -32,11 +35,18 @@ const Quiz = () => {
                         type="text"
                         placeholder="Question"
                         value={question}
-                        onChange={(e) => setQuestion(e.target.value)}
+                        onChange={(e) => {
+                            setQuestion(e.target.value)
+                            console.log(question);
+                        }
+
+
+                        }
                     />
                     {options.map((option, index) => (
                         <input
                             key={index}
+                            id={index}
                             className="h-10 bg-cyan-700 font-bold text-xl uppercase"
                             type="text"
                             placeholder={`Answer/option ${index + 1}`}
@@ -45,15 +55,13 @@ const Quiz = () => {
                                 const newOptions = [...options];
                                 newOptions[index] = e.target.value;
                                 setOptions(newOptions);
-                                console.log(newOptions)
                             }}
                         />
                     ))}
                 </div>
-                <button onClick={handleSaveQuestion} className="button">Save Question</button>
                 <div className="flex gap-3 mt-4">
-                    <Link className="button" to="/next-page">Next</Link>
-                    <Link className="button" to="/">Exit</Link>
+                    <button onClick={handleSaveQuestion} className="button">SAVE Question</button>
+                    <button onClick={exitprocess} className="button" to="/">Exit</button>
                 </div>
             </div>
         </div>
@@ -62,5 +70,3 @@ const Quiz = () => {
 
 export default Quiz;
 
-
-// WILL DO TOMORROW 
