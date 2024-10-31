@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Abouts from '../pages/Abouts';
-// import { Link } from 'react-router-dom';
 const Header = () => {
     const [name, setname] = useState("Faisal");
     return (
