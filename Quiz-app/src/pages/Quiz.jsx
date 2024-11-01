@@ -129,3 +129,5 @@ const Quiz = () => {
 };
 
 export default Quiz;
+
+// function aj kuvh n hi  kr tha bas bakcode
