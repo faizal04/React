@@ -9,7 +9,8 @@ const Quiz = () => {
     const answer = ["select", 1, 2, 3, 4];
     const [answerid, setanswerid] = useState();
     let [timer, settimer] = useState(10);
-    let exit = 0;
+    let [exit, setexit] = useState(false);
+    let [points, setpoints] = useState(0);
 
 
     const handleSaveQuestion = () => {
@@ -30,8 +31,7 @@ const Quiz = () => {
     };
 
     const exitprocess = async () => {
-        exit = 1;
-        // Save quizData to localStorage
+        setexit(true);
         localStorage.setItem("quizdata", JSON.stringify(quizData));
         setdisplayhead('Let’s see how much you know about {props.username}');
         set_ele(true);
@@ -41,10 +41,11 @@ const Quiz = () => {
         console.log(data_backup);
 
         if (data_backup && data_backup.length > 0) {
-            // Loop over each question with a delay
+            console.log(data_backup);
             for (const item of data_backup) {
                 setQuestion(item.question);
                 setOptions(item.options);
+                setanswerid(item.answerid);
                 settimer(10)
                 const timerInterval = setInterval(() => {
                     settimer((lastTimer) => {
@@ -56,10 +57,16 @@ const Quiz = () => {
                     })
                 }, 1000);
                 await new Promise(resolve => setTimeout(resolve, 10000));
+
+
             }
+            endquiz();
         }
 
     };
+    const endquiz = () => {
+        console.log(`your total points are ${points}`);
+    }
 
 
     return (
@@ -76,21 +83,54 @@ const Quiz = () => {
                         onChange={(e) => setQuestion(e.target.value)}
                     />
 
-                    {options.map((option, index) => (
-                        <input
 
-                            key={index}
-                            className="h-10 bg-cyan-700 font-bold text-xl uppercase"
-                            type="text"
-                            placeholder={`Answer/option ${index + 1}`}
-                            value={option}
-                            onChange={(e) => {
-                                const newOptions = [...options];
-                                newOptions[index] = e.target.value;
-                                setOptions(newOptions);
-                            }}
-                        />
-                    ))}
+                    {!exit &&
+                        options.map((option, index) => (
+                            <input
+
+                                key={index}
+                                className="h-10 bg-cyan-700 font-bold text-xl uppercase"
+                                type="text"
+                                placeholder={`Answer/option ${index + 1}`}
+                                value={option}
+                                onChange={(e) => {
+                                    const newOptions = [...options];
+                                    newOptions[index] = e.target.value;
+                                    setOptions(newOptions);
+                                }}
+                            />
+                        ))
+                    }
+                    {exit &&
+                        options.map((option, index) => (
+                            <input
+                                key={index}
+                                className="h-10 bg-cyan-700 font-bold text-xl uppercase"
+                                type="text"
+                                placeholder={`Answer/option ${index + 1}`}
+                                value={option}
+                                onClick={(e) => {
+                                    if (+answerid === index + 1) {
+                                        e.target.style.backgroundColor = "green";
+                                        setpoints((previousPoints) => previousPoints + 10);
+                                        // console.log("correct answer");
+                                        // console.log(+answerid);
+                                        // console.log(index + 1);
+
+                                    }
+                                    else {
+                                        e.target.style.backgroundColor = "red";
+                                    }
+                                    setTimeout(() => {
+                                        e.target.style.backgroundColor = "#0e7490"
+                                    }, 1000);
+
+
+                                }}
+                            />
+                        ))
+                    }
+
                     {!hide_ele && (
                         <div className='h-9'>
                             <label className='font-bold text-xl mr-5 ' htmlFor="answer">Answer</label>
@@ -130,4 +170,4 @@ const Quiz = () => {
 
 export default Quiz;
 
-// function aj kuvh n hi  kr tha bas bakcode
+
