@@ -171,3 +171,11 @@ const Quiz = () => {
 export default Quiz;
 
 
+        // pending functions 
+        // deactivate the input tag after exit btn is pressed 
+        // show points in a dialog box
+        // make responsive
+        // write about page
+        // take username from user and print it on screen
+        // upload a logo
+        // after one option is selected no other option should be clicked
