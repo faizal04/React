@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 const containerStyle = {
   display: "flex",
@@ -10,19 +11,32 @@ const starContainerStyle = {
   display: "flex",
   gap: "4px",
 };
+StarRating.propTypes = {
+  maxRating: PropTypes.number,
+  defaultRating: PropTypes.number,
+  size: PropTypes.number,
+  fontSize: PropTypes.number,
+  message: PropTypes.array,
+  className: PropTypes.string,
+  color: PropTypes.string,
+  setrated: PropTypes.func,
+};
 export default function StarRating({
-  maxRating,
+  maxRating = 5,
   color = "black",
   size = 48,
   fontSize = size / 1,
   message = [],
+  fontColor = color,
   className = "",
   defaultRating = 0,
+  setrated,
 }) {
   const textStyle = {
     lineHeight: "1",
     margin: "0",
     fontSize: `${fontSize}px`,
+    color: fontColor,
   };
   const [rating, setrating] = useState(defaultRating);
   const [temprating, settemprating] = useState(0);
@@ -33,7 +47,11 @@ export default function StarRating({
         {Array.from({ length: maxRating }, (_, i) => (
           <Star
             key={i}
-            onrate={() => setrating(i + 1)}
+            onrate={() => {
+              setrating(i + 1);
+
+              setrated && setrated(i + 1);
+            }}
             rating={temprating ? temprating >= i + 1 : rating >= i + 1}
             onhover={() => settemprating(i + 1)}
             onhoverexit={() => settemprating(0)}
