@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-
+import Domselectedid from "./components/Domselectedid.js";
+import WatchedMovie from "./components/WatchedMovie.js";
+import Loading from "./components/Loading";
 const tempMovieData = [
   {
     imdbID: "tt1375666",
@@ -87,10 +89,18 @@ export default function App() {
   );
 
   function boxback(id) {
-    setselectedid(selectedid === id ? null : id);
+    setselectedid(null);
   }
   function displaymoviesection(id) {
     setselectedid((selectedid) => (selectedid === id ? null : id));
+  }
+
+  function handleAddwatched(movies) {
+    setWatched((watched) => [...watched, movies]);
+    function check() {
+      console.log(watched);
+    }
+    check();
   }
   return (
     <>
@@ -117,6 +127,7 @@ export default function App() {
               selectedid={selectedid}
               boxback={boxback}
               apikey={apikey}
+              onAddWatched={handleAddwatched}
             />
           ) : (
             <>
@@ -130,60 +141,8 @@ export default function App() {
   );
 }
 
-function Domselectedid({ selectedid, boxback, apikey }) {
-  const [movie, setmovie] = useState();
-  const {
-    Title: title,
-    Year: year,
-    Poster: poster,
-    Runtime: runtime,
-    imdbRating,
-    Plot: plot,
-    Released: released,
-    Actors: actors,
-    Director: director,
-    Genre: genre,
-  } = movie;
-  useEffect(() => {
-    async function getmoviedetail() {
-      const res = await fetch(
-        `http://www.omdbapi.com/?apikey=${apikey}&i=${selectedid}`
-      );
-      const data = await res.json();
-      console.log(data);
-    }
-    getmoviedetail();
-  }, []);
-
-  return (
-    <div className="details">
-      <>
-        <header>
-          <button className="btn-back">&larr;</button>
-          <img src={poster} alt={`Poster of ${movie} movie`} />
-          <div className="details-overview">
-            <h2>{title}</h2>
-            <p>
-              {released} &bull; {runtime}
-            </p>
-            <p>{genre}</p>
-            <p>
-              <span>⭐️</span>
-              {imdbRating} IMDb rating
-            </p>
-          </div>
-        </header>
-
-        {/* <p>{avgRating}</p> */}
-      </>
-    </div>
-  );
-}
 function Error({ message }) {
   return <p>{message}</p>;
-}
-function Loading() {
-  return <p className="loader">loading...</p>;
 }
 
 function Navbar({ children }) {
@@ -282,28 +241,6 @@ function MovieWatchedList({ watched }) {
   );
 }
 
-function WatchedMovie({ movies }) {
-  return (
-    <li key={movies.imdbID}>
-      <img src={movies.Poster} alt={`${movies.Title} poster`} />
-      <h3>{movies.Title}</h3>
-      <div>
-        <p>
-          <span>⭐️</span>
-          <span>{movies.imdbRating}</span>
-        </p>
-        <p>
-          <span>🌟</span>
-          <span>{movies.userRating}</span>
-        </p>
-        <p>
-          <span>⏳</span>
-          <span>{movies.runtime} min</span>
-        </p>
-      </div>
-    </li>
-  );
-}
 function WactchedSummary({ watched }) {
   const avgImdbRating = average(watched.map((movies) => movies.imdbRating));
   const avgUserRating = average(watched.map((movies) => movies.userRating));
