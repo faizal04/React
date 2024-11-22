@@ -1,23 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
-// import "./index.css";
-// import App from "./App";
-import StarRating from "./components/StarRating";
-function Test() {
-  const [rated, setrated] = useState(0);
-  return (
-    <div>
-      <StarRating color="green" setrated={setrated} />
-      <p>this movie was rated {rated} </p>
-    </div>
-  );
-}
+import "./index.css";
+import App from "./App";
+// import StarRating from "./components/StarRating";
+// function Test() {
+//   const [rated, setrated] = useState(0);
+//   return (
+//     <div>
+//       <StarRating color="green" setrated={setrated} />
+//       <p>this movie was rated {rated} </p>
+//     </div>
+//   );
+// }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    {/* <App /> */}
-    <StarRating
+    <App />
+    {/* <StarRating
       maxRating={7}
       color="white"
       size={40}
@@ -28,8 +28,6 @@ root.render(
       defaultRating={3}
     />
     <StarRating />
-    <Test />
+    <Test /> */}
   </React.StrictMode>
 );
-// today
-//new day without learning
