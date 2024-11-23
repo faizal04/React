@@ -11,6 +11,21 @@ export default function Domselectedid({
   const [movie, setmovie] = useState({});
   const [isloading, setloading] = useState(false);
   const [userRating, setUserRating] = useState();
+  useEffect(
+    function () {
+      function keypressevent(e) {
+        if (e.code === "Escape") {
+          boxback();
+        }
+      }
+      document.addEventListener("keydown", keypressevent);
+      return function () {
+        document.removeEventListener("keydown", keypressevent);
+      };
+    },
+    [boxback]
+  );
+
   useEffect(() => {
     async function getmoviedetail() {
       setloading(true);
@@ -18,12 +33,11 @@ export default function Domselectedid({
         `http://www.omdbapi.com/?apikey=${apikey}&i=${selectedid}`
       );
       const data = await res.json();
-      console.log(data);
       setmovie(data);
       setloading(false);
     }
     getmoviedetail();
-  }, [selectedid]);
+  }, [selectedid, apikey]);
 
   const {
     Title: title,
@@ -38,7 +52,6 @@ export default function Domselectedid({
     Genre: genre,
   } = movie;
   function handleAdd() {
-    console.log(userRating);
     const newWatchedMovie = {
       imdbID: selectedid,
       title,
@@ -48,10 +61,20 @@ export default function Domselectedid({
       runtime: Number(runtime.split(" ").at(0)),
       userRating,
     };
-    console.log(newWatchedMovie);
     onAddWatched(newWatchedMovie);
     boxback();
   }
+
+  useEffect(
+    function () {
+      if (!title) return;
+      document.title = `Movie: ${movie.Title}`;
+      return function () {
+        document.title = "CinemaScope";
+      };
+    },
+    [title, movie]
+  );
   return (
     <div className="details">
       {isloading ? (
