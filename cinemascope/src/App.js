@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Domselectedid from "./components/Domselectedid.js";
 import WatchedMovie from "./components/WatchedMovie.js";
 import Loading from "./components/Loading";
@@ -7,7 +7,6 @@ import WactchedSummary from "./components/WatchedSummary.js";
 
 export default function App() {
   const [query, setQuery] = useState("");
-
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isload, setloading] = useState(false);
@@ -124,12 +123,17 @@ function Logo() {
   );
 }
 function Search({ query, setquery }) {
+  const searchEl = useRef(null);
+  useEffect(() => {
+    searchEl.current.focus();
+  }, []);
   return (
     <input
       className="search"
       type="text"
       placeholder="Search movies..."
       value={query}
+      ref={searchEl}
       onChange={(e) => setquery(e.target.value)}
     />
   );

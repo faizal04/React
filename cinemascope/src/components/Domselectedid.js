@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Loading from "./Loading.js";
 import StarRating from "./StarRating.js";
 
@@ -25,6 +25,10 @@ export default function Domselectedid({
     },
     [boxback]
   );
+  const count = useRef(0);
+  useEffect(() => {
+    if (userRating) count.current += 1;
+  }, [userRating]);
 
   useEffect(() => {
     async function getmoviedetail() {
@@ -60,6 +64,7 @@ export default function Domselectedid({
       imdbRating: Number(imdbRating),
       runtime: Number(runtime.split(" ").at(0)),
       userRating,
+      countRatingDecision: count.current,
     };
     onAddWatched(newWatchedMovie);
     boxback();
@@ -106,6 +111,7 @@ export default function Domselectedid({
                 color="yellow"
                 fontSize={15}
                 setrated={setUserRating}
+                ref={count}
               />
               <button className="btn-add" onClick={handleAdd}>
                 add to list
