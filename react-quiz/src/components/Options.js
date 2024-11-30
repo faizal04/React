@@ -11,7 +11,7 @@ function Options({ question, dispatch, answer }) {
                 : "wrong"
               : ""
           }`}
-          // key={option}
+          key={index}
           disabled={hasAnswered}
           onClick={() => {
             dispatch({

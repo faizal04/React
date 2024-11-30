@@ -7,7 +7,7 @@ function Progress({ index, numQuestion, points, pointsSum, answer }) {
       </p>
       <p>
         <strong>
-          {points ? points : 0}/{pointsSum}
+          {points}/{pointsSum}
         </strong>
       </p>
     </header>
