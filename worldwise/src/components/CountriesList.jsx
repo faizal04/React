@@ -1,24 +1,31 @@
-import Cityitem from "./Cityitem";
-import styles from "./CityList.module.css";
+// import Cityitem from "./Cityitem";
+import styles from "./CountryList.module.css";
 import PropTypes from "prop-types";
 import Spinner from "./Spinner";
 import Message from "./Message";
-function Citylist({ cities, isloading }) {
+import Countryitem from "./CountryItem";
+function CountriesList({ cities, isloading }) {
   console.log(cities);
   if (isloading) return <Spinner />;
   if (!cities.length)
     return (
       <Message message="add your first city by clicking a city on the map" />
     );
+  const countries = cities.reduce((arr, city) => {
+    if (!arr.map((el) => el.country).includes(city.country)) {
+      console.log(arr);
+      return [...arr, { country: city.country, emoji: city.emoji }];
+    } else return arr;
+  }, []);
   return (
-    <ul className={styles.cityList}>
-      {cities.map((city) => (
-        <Cityitem city={city} key={city.id} />
+    <ul className={styles.countryList}>
+      {countries.map((country, index) => (
+        <Countryitem country={country} key={index} />
       ))}
     </ul>
   );
 }
-Citylist.propTypes = {
+CountriesList.propTypes = {
   cities: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
@@ -30,4 +37,4 @@ Citylist.propTypes = {
   isloading: PropTypes.bool.isRequired,
 };
 
-export default Citylist;
+export default CountriesList;
