@@ -10,7 +10,7 @@ const formatDate = (date) =>
   }).format(new Date(date));
 
 function Cityitem({ city }) {
-  const { currentCity } = Cities();
+  const { currentCity, setMapPosition } = Cities();
   const { cityName, emoji, date, id, position } = city;
   return (
     <li>

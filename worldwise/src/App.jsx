@@ -14,7 +14,6 @@ import City from "./components/City";
 import { CitiesProvider, Cities } from "./Contexts/CitiesContext";
 // const BaseUrl = "http://localhost:8000/cities";
 function App() {
-  console.log(position);
   return (
     <CitiesProvider>
       <BrowserRouter>
