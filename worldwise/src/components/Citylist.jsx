@@ -3,7 +3,9 @@ import styles from "./CityList.module.css";
 import PropTypes from "prop-types";
 import Spinner from "./Spinner";
 import Message from "./Message";
-function Citylist({ cities, isloading }) {
+import { Cities } from "../Contexts/CitiesContext";
+function Citylist() {
+  const { cities, isloading } = Cities();
   console.log(cities);
   if (isloading) return <Spinner />;
   if (!cities.length)

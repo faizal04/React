@@ -4,8 +4,9 @@ import PropTypes from "prop-types";
 import Spinner from "./Spinner";
 import Message from "./Message";
 import Countryitem from "./CountryItem";
-function CountriesList({ cities, isloading }) {
-  console.log(cities);
+import { Cities } from "../Contexts/CitiesContext";
+function CountriesList() {
+  const { cities, isloading } = Cities();
   if (isloading) return <Spinner />;
   if (!cities.length)
     return (
