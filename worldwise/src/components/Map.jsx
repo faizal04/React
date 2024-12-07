@@ -1,4 +1,6 @@
 import { useActionData, useNavigate, useSearchParams } from "react-router-dom";
+import { useGeolocation } from "../hooks/GeoLocation.js";
+import { useUrlPosition } from "../hooks/useUrlPosition.js";
 import {
   MapContainer,
   TileLayer,
@@ -7,32 +9,46 @@ import {
   useMap,
   useMapEvent,
 } from "react-leaflet";
+import Button from "./Button.jsx";
 import styles from "./Map.module.css";
 import { useEffect, useState } from "react";
 import { Cities } from "../Contexts/CitiesContext";
 function Map() {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const lat = searchParams.get("lat");
-  const lng = searchParams.get("lng");
-  // const [location, setlocation] = useState([lat, lng]);
+  // const navigate = useNavigate();
+  const {
+    isLoading: isLoadingPosition,
+    position: geolocationPosition,
+    getPosition,
+  } = useGeolocation();
+  const [lat, lng] = useUrlPosition();
+
   const [mapPosition, setMapPosition] = useState([40, 0]);
   const { cities } = Cities();
-  // const position = navigator.geolocation.getCurrentPosition(showPosition);
-  // function showPosition(position) {
-  //   console.log(position);
-  // }
   useEffect(
     function () {
       if ((lat, lng)) setMapPosition([lat, lng]);
     },
     [lat, lng]
   );
+  useEffect(
+    function () {
+      if (geolocationPosition)
+        setMapPosition([geolocationPosition.lat, geolocationPosition.lng]);
+    },
+    [geolocationPosition]
+  );
   return (
     <div className={styles.mapContainer}>
+      {!geolocationPosition && (
+        <>
+          <Button type="position" onClick={getPosition}>
+            {isLoadingPosition ? "Loading..." : "Use Your Location"}
+          </Button>
+        </>
+      )}
+
       <MapContainer
         center={mapPosition}
-        // center={[lat, lng]}
         zoom={13}
         scrollWheelZoom={true}
         className={styles.map}
@@ -47,10 +63,19 @@ function Map() {
             key={city.id}
           >
             <Popup>
-              A pretty CSS3 popup. <br /> Easily customizable.
+              😣
+              <br /> Easily customizable.
             </Popup>
           </Marker>
         ))}
+        {geolocationPosition && (
+          <Marker position={mapPosition}>
+            <Popup>
+              Here You Are
+              <br /> 👍
+            </Popup>
+          </Marker>
+        )}
         <ChangeCenter mapPosition={mapPosition} />
         <DetectClick />
       </MapContainer>
