@@ -1,7 +1,4 @@
-import { useQuiz } from "./Context/QuizContext";
-
-function ReadyScreen() {
-  const { questionsnum, dispatch } = useQuiz();
+function ReadyScreen({ questionsnum, dispatch }) {
   return (
     <div>
       <h2>{questionsnum} questions are ready </h2>

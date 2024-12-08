@@ -1,7 +1,4 @@
-import { useQuiz } from "../Context/QuizContext";
-
-function FinishedScreen() {
-  const { points, pointsSum, highscore, dispatch } = useQuiz();
+function FinishedScreen({ points, pointsSum, highscore, dispatch }) {
   return (
     <>
       <div>
