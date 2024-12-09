@@ -1,10 +1,9 @@
-import { func } from "prop-types";
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useReducer,
-  useState,
 } from "react";
 
 const CitiesContext = createContext();
@@ -55,35 +54,37 @@ function CitiesProvider({ children }) {
 
   useEffect(function () {
     async function getdata() {
+      dispatch({ type: "loading" });
       try {
-        dispatch({ type: "loading" });
         const res = await fetch("http://localhost:8000/cities");
         const data = await res.json();
         dispatch({ type: "cities/loaded", payload: data });
       } catch (err) {
-        alert(err);
+        console.log("error");
       } finally {
         dispatch({ type: "loaded" });
       }
     }
     getdata();
   }, []);
-  async function getCity(id) {
-    if (Number(id) === currentCity.id) return;
-    try {
-      dispatch({ type: "loading" });
+  const getCity = useCallback(
+    async function getCity(id) {
+      if (Number(id) === currentCity.id) return;
+      try {
+        dispatch({ type: "loading" });
 
-      const res = await fetch(`http://localhost:8000/cities/${id}`);
-      const data = await res.json();
-      // setCurrentCity(data);
-      dispatch({ type: "city/loaded", payload: data });
-    } catch (err) {
-      alert(err.message);
-    } finally {
-      dispatch({ type: "loaded" });
-    }
-  }
-
+        const res = await fetch(`http://localhost:8000/cities/${id}`);
+        const data = await res.json();
+        // setCurrentCity(data);
+        dispatch({ type: "city/loaded", payload: data });
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        dispatch({ type: "loaded" });
+      }
+    },
+    [currentCity.id]
+  );
   async function CreateCity(newCity) {
     try {
       dispatch({ type: "loading" });
