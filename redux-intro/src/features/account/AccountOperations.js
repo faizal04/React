@@ -11,7 +11,7 @@ function AccountOperations() {
 
   const dispatch = useDispatch();
 
-  const loan = useSelector((state) => state.account.loan);
+  const state = useSelector((state) => state.account);
 
   function handleDeposit() {
     if (!depositAmount) return;
@@ -87,9 +87,9 @@ function AccountOperations() {
           <button onClick={handleRequestLoan}>Request loan</button>
         </div>
 
-        {loan && (
+        {state.loan && (
           <div>
-            <span>Pay back {loan}</span>
+            <span>Pay back {state.loan}</span>
             <button onClick={handlePayLoan}>Pay loan</button>
           </div>
         )}
