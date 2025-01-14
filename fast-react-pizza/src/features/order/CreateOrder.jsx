@@ -1,13 +1,12 @@
 import { Form, redirect, useActionData, useNavigation } from 'react-router-dom';
-// import { createOrder } from '../../services/apiRestaurant';
 import Button from '../../ui/Button';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { clearCart, getCart } from '../cart/cartSlice';
-// import Order from './Order';
 import EmptyCart from '../cart/EmptyCart';
 import { createOrder } from '../../services/apiRestaurant';
 import store from '../../store';
-// https://uibakery.io/regex-library/phone-number
+import { fetchAddress } from '../userSlice';
+
 const isValidPhone = (str) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
     str,
@@ -18,8 +17,17 @@ function CreateOrder() {
   const isSubmitting = navigation.state === 'submitting';
   const user = useSelector((state) => state.user.username);
   const formErrors = useActionData();
+  const dispatch = useDispatch();
+  const {
+    status: addressStatus,
+    //eslint-disable-next-line
+    position,
+    //eslint-disable-next-line
+    address,
+    error: errorAddress,
+  } = useSelector((state) => state.user);
+  const isLoadingStatus = addressStatus === 'loading';
 
-  // const [withPriority, setWithPriority] = useState(false);
   const cart = useSelector(getCart);
   console.log(cart);
 
@@ -56,13 +64,34 @@ function CreateOrder() {
 
         <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center">
           <label className="sm:basis-40">Address</label>
-          <div className="grow">
+          <div className="relative grow">
             <input
               className="input w-full"
               type="text"
               name="address"
+              disabled={isLoadingStatus}
+              defaultValue={address}
               required
             />
+            {addressStatus === 'error' && (
+              <p className="mt-2 rounded-md bg-red-100 p-2 text-xs text-red-700">
+                {errorAddress}
+              </p>
+            )}
+            {!position.latitude && !position.longitude && (
+              <span className="absolute right-0.5 top-0.5 z-10 md:right-0 md:top-0">
+                <Button
+                  type="small"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    dispatch(fetchAddress());
+                  }}
+                >
+                  {' '}
+                  get location
+                </Button>
+              </span>
+            )}
           </div>
         </div>
 

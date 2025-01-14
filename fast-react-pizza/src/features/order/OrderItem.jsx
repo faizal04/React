@@ -1,5 +1,4 @@
 import { formatCurrency } from '../../utils/helpers';
-
 //eslint-disable-next-line
 function OrderItem({ item, isLoadingIngredients, ingredients }) {
   console.log(item);
@@ -11,6 +10,12 @@ function OrderItem({ item, isLoadingIngredients, ingredients }) {
       <div className="flex w-full items-center justify-between space-x-4 font-semibold">
         <p>
           <span>{quantity}&times;</span> {name}
+          <p className="capitalize italic text-stone-500">
+            {isLoadingIngredients
+              ? 'loading...'
+              : //eslint-disable-next-line
+                ingredients.join(',')}
+          </p>
         </p>
         <p>{formatCurrency(totalPrice)}</p>
       </div>
