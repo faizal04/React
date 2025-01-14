@@ -1,11 +1,12 @@
 // Test ID: IIDSAT
-import { useLoaderData } from "react-router-dom";
-import { getOrder } from "../../services/apiRestaurant";
+import OrderItem from './OrderItem';
+import { useLoaderData } from 'react-router-dom';
+import { getOrder } from '../../services/apiRestaurant';
 import {
   calcMinutesLeft,
   formatCurrency,
   formatDate,
-} from "../../utils/helpers";
+} from '../../utils/helpers';
 
 function Order() {
   const order = useLoaderData();
@@ -22,31 +23,57 @@ function Order() {
     cart,
   } = order;
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
+  // console.log(cart);
 
   return (
-    <div>
-      <div>
-        <h2>Status</h2>
+    <div className="mt-4">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+        <h2 className="font-roboto text-xl font-extrabold">
+          Order #{id} Status
+        </h2>
 
-        <div>
-          {priority && <span>Priority</span>}
-          <span>{status} order</span>
+        <div className="gap-3 space-x-3">
+          {priority && (
+            <span className="rounded-full bg-red-500 p-2 font-semibold uppercase tracking-wide text-stone-200">
+              Priority
+            </span>
+          )}
+          <span className="rounded-full bg-green-500 p-2 font-semibold uppercase tracking-wide text-stone-200">
+            {status} order
+          </span>
         </div>
       </div>
 
-      <div>
+      <div className="font-stone-50 mb-4 flex flex-wrap items-center justify-between gap-4 bg-stone-400 p-2 text-stone-700">
         <p>
           {deliveryIn >= 0
             ? `Only ${calcMinutesLeft(estimatedDelivery)} minutes left 😃`
-            : "Order should have arrived"}
+            : 'Order should have arrived'}
         </p>
         <p>(Estimated delivery: {formatDate(estimatedDelivery)})</p>
       </div>
 
-      <div>
-        <p>Price pizza: {formatCurrency(orderPrice)}</p>
-        {priority && <p>Price priority: {formatCurrency(priorityPrice)}</p>}
-        <p>To pay on delivery: {formatCurrency(orderPrice + priorityPrice)}</p>
+      <ul className="divide-y-2 divide-stone-500 border-b-2 border-stone-500">
+        {cart.map((item) => (
+          <OrderItem item={item} key={item.id} />
+        ))}
+      </ul>
+
+      <div className="font-stone-50 mb-4 mt-4 items-center justify-between space-y-4 bg-stone-400 p-2 text-stone-700">
+        <p className="flex w-full justify-between font-semibold">
+          Price pizza: <span>{formatCurrency(orderPrice)}</span>
+        </p>
+        {priority && (
+          <p className="flex w-full justify-between font-semibold">
+            Price priority:<span>{formatCurrency(priorityPrice)}</span>
+          </p>
+        )}
+        <p className="flex w-full justify-between font-bold">
+          To pay on delivery:{' '}
+          <span className="underline">
+            {formatCurrency(orderPrice + priorityPrice)}
+          </span>
+        </p>
       </div>
     </div>
   );

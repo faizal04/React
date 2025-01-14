@@ -1,10 +1,14 @@
 import PropTypes from 'prop-types';
 import { formatCurrency } from '../../utils/helpers';
-import Button from '../../ui/Button';
+import DeleteBtn from './DeleteBtn';
+import UpdateItem from './UpdateItem';
+// import Button from '../../ui/Button';
+// import { useDispatch } from 'react-redux';
+// import { deleteItem } from './cartSlice';
 
 function CartItem({ item }) {
   //eslint-disable-next-line
-  const { pizzaId, name, quantity, totalPrice } = item;
+  const { pizzaId, name, quantity, totalPrice, unitPrice } = item;
 
   return (
     <li className="cursor-pointer list-none justify-between p-2 sm:flex sm:items-center">
@@ -12,8 +16,9 @@ function CartItem({ item }) {
         {quantity}&times; {name}
       </p>
       <div className="flex items-center justify-between sm:gap-6">
-        <p className="font-semibold">{formatCurrency(totalPrice)}</p>
-        <Button type="primary">Delete</Button>
+        <p className="font-semibold">{formatCurrency(unitPrice)}</p>
+        <UpdateItem pizzaid={pizzaId} quantity={quantity} />
+        <DeleteBtn id={pizzaId} />
       </div>
     </li>
   );
