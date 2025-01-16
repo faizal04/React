@@ -1,7 +1,11 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { formatCurrency } from "../../utils/helpers";
+import CreateCabinForm from "./CreateCabinForm";
+import { useState } from "react";
+import useDeleteCabin from "./useDeleteCabin";
 
+//Styling
 const TableRow = styled.div`
   display: grid;
   grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
@@ -13,7 +17,6 @@ const TableRow = styled.div`
     border-bottom: 1px solid var(--color-grey-100);
   }
 `;
-// eslint-disable-next-line
 const Img = styled.img`
   display: block;
   width: 6.4rem;
@@ -22,44 +25,56 @@ const Img = styled.img`
   object-position: center;
   transform: scale(1.5) translateX(-7px);
 `;
-// eslint-disable-next-line
 const Cabin = styled.div`
   font-size: 1.6rem;
   font-weight: 600;
   color: var(--color-grey-600);
   font-family: "Sono";
 `;
-// eslint-disable-next-line
+
 const Price = styled.div`
   font-family: "Sono";
   font-weight: 600;
 `;
-// eslint-disable-next-line
 const Discount = styled.div`
   font-family: "Sono";
   font-weight: 500;
   color: var(--color-green-700);
 `;
-// eslint-disable-next-line
+
 function CabinRow({ cabin }) {
+  const [isFormOpen, setFormOpen] = useState(false);
+  const { isLoading, deleteCabin } = useDeleteCabin();
   return (
-    <TableRow>
-      <Img src={cabin.image} />
-      <Cabin>{cabin.description}</Cabin>
-      <div>{cabin.maxCapacity}</div>
-      <Price>{formatCurrency(cabin.regularPrice)}</Price>
-      <Discount>{formatCurrency(cabin.discount)}</Discount>
-    </TableRow>
+    <>
+      <TableRow>
+        <Img src={cabin.image} />
+
+        <Cabin>{cabin.name}</Cabin>
+        <div>{cabin.maxCapacity}</div>
+        <Price>{formatCurrency(cabin.regularPrice)}</Price>
+        <Discount>{formatCurrency(cabin.discount)}</Discount>
+        <div>
+          <button onClick={() => deleteCabin(cabin.id)} disabled={isLoading}>
+            delete
+          </button>
+          <button onClick={() => setFormOpen(!isFormOpen)}>edit</button>
+        </div>
+      </TableRow>
+      {isFormOpen && <CreateCabinForm cabinToEdit={cabin} />}
+    </>
   );
 }
 
 CabinRow.propTypes = {
   cabin: PropTypes.shape({
     image: PropTypes.string,
+    name: PropTypes.string,
     description: PropTypes.string,
     regularPrice: PropTypes.number,
     maxCapacity: PropTypes.number,
     discount: PropTypes.number,
+    id: PropTypes.number,
   }),
 };
 

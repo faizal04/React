@@ -6,7 +6,7 @@ import styled from "styled-components";
 const Main = styled.main`
   background-color: var(--color-grey-50);
   border: 1px solid var(--color-grey-100);
-  padding: 4rem 4.8rem 2rem 5rem;
+  padding: 4rem 4.8rem 6.4rem;
 `;
 
 const StyledAppLayout = styled.div`
@@ -15,6 +15,13 @@ const StyledAppLayout = styled.div`
   grid-template-rows: auto 1fr;
   height: 100vh;
 `;
+const Container = styled.div`
+  max-width: 100vw;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+`;
 
 function AppLayout() {
   return (
@@ -22,7 +29,9 @@ function AppLayout() {
       <Header />
       <Sidebar />
       <Main>
-        <Outlet />
+        <Container>
+          <Outlet />
+        </Container>
       </Main>
     </StyledAppLayout>
   );
