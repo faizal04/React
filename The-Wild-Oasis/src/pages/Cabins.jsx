@@ -1,12 +1,9 @@
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
 import CabinTable from "../features/cabins/CabinTable";
-import CreateCabinForm from "../features/cabins/CreateCabinForm";
-import { useState } from "react";
-import Button from "../ui/Button";
+import ModalCabin from "../features/cabins/ModalCabin";
 
 function Cabins() {
-  const [isopen, setisopen] = useState(false);
   return (
     <>
       <Row type="horizontal">
@@ -16,14 +13,8 @@ function Cabins() {
 
       <Row>
         <CabinTable />
-        <Button
-          onClick={() => {
-            setisopen(!isopen);
-          }}
-        >
-          Add Cabin
-        </Button>
-        {isopen && <CreateCabinForm />}
+
+        <ModalCabin />
       </Row>
     </>
   );

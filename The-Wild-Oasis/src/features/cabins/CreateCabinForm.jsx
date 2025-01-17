@@ -44,17 +44,17 @@ const Error = styled.span`
   font-size: 1.4rem;
   color: var(--color-red-700);
 `;
-
-function CreateCabinForm({ cabinToEdit = {} }) {
-  const isWorking = isCreating || isEditing;
-  const { id: editId, ...editValues } = cabinToEdit;
-  const isEditSession = Boolean(editId);
-  const { errors } = formState;
+//eslint-disable-next-line
+function CreateCabinForm({ cabinToEdit = {}, closeModal }) {
   const { isCreating, createCabin } = useCreateCabin();
   const { editCabin, isEditing } = useEditCabin();
+  const { id: editId, ...editValues } = cabinToEdit;
+  const isEditSession = Boolean(editId);
   const { register, handleSubmit, reset, getValues, formState } = useForm({
     defaultValues: isEditSession ? editValues : {},
   });
+  const { errors } = formState;
+  const isWorking = isCreating || isEditing;
 
   function onSubmit(data) {
     const image = typeof data.image === "string" ? data.image : data.image[0];
@@ -62,9 +62,22 @@ function CreateCabinForm({ cabinToEdit = {} }) {
     isEditSession
       ? editCabin(
           { newCabinData: { ...data, image }, id: editId },
-          { onSuccess: () => reset() }
+          {
+            onSuccess: () => {
+              reset();
+              closeModal;
+            },
+          }
         )
-      : createCabin({ ...data, image: image }, { onSuccess: () => reset() });
+      : createCabin(
+          { ...data, image: image },
+          {
+            onSuccess: () => {
+              reset();
+              closeModal?.();
+            },
+          }
+        );
   }
 
   function onError(errors) {
@@ -73,12 +86,15 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   if (isWorking) return <Spinner />;
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit, onError)}
+      type={closeModal ? "modal" : "regular"}
+    >
       <FormRow label="Cabin Name" error={errors?.name?.message}>
         <Input
           type="text"
           id="name"
-          disabled={isCreating}
+          disabled={isWorking}
           {...register("name", { required: "This Field is Required" })}
         />
       </FormRow>
@@ -87,7 +103,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Input
           type="number"
           id="maxCapacity"
-          disabled={isCreating}
+          disabled={isWorking}
           {...register("maxCapacity", {
             required: "This Field is Required",
             min: {
@@ -102,7 +118,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Input
           type="number"
           id="regularPrice"
-          disabled={isCreating}
+          disabled={isWorking}
           {...register("regularPrice", {
             required: "This Field is Required",
             min: {
@@ -117,7 +133,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Input
           type="number"
           id="discount"
-          disabled={isCreating}
+          disabled={isWorking}
           defaultValue={0}
           {...register("discount", {
             required: "This Field is Required",
@@ -134,7 +150,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Textarea
           type="number"
           id="description"
-          disabled={isCreating}
+          disabled={isWorking}
           defaultValue=""
           {...register("description", { required: "This Field is Required" })}
         />
@@ -151,10 +167,16 @@ function CreateCabinForm({ cabinToEdit = {} }) {
       </FormRow>
 
       <FormRow2>
-        <Button variation="secondary" type="reset">
+        <Button
+          variation="secondary"
+          type="reset"
+          onClick={() => {
+            closeModal?.();
+          }}
+        >
           Cancel
         </Button>
-        <Button disabled={isCreating}>
+        <Button disabled={isWorking}>
           {isEditSession ? "Edit cabin" : "Add Cabin"}
         </Button>
       </FormRow2>

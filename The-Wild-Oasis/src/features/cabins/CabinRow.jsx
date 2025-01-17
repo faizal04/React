@@ -5,6 +5,9 @@ import CreateCabinForm from "./CreateCabinForm";
 import { useState } from "react";
 import useDeleteCabin from "./useDeleteCabin";
 
+import { HiDuplicate } from "react-icons/hi";
+import useCreateCabin from "./useCreateCabin";
+
 //Styling
 const TableRow = styled.div`
   display: grid;
@@ -45,6 +48,22 @@ const Discount = styled.div`
 function CabinRow({ cabin }) {
   const [isFormOpen, setFormOpen] = useState(false);
   const { isLoading, deleteCabin } = useDeleteCabin();
+  //eslint-disable-next-line
+  const { createCabin, isCreating } = useCreateCabin();
+  //eslint-disable-next-line
+  const { name, maxCapacity, regularPrice, discount, description, image } =
+    cabin;
+  function handleDuplicate() {
+    // console.log(cabinId);
+    createCabin({
+      name: `copy of ${name}`,
+      maxCapacity,
+      regularPrice,
+      discount,
+      description,
+      image,
+    });
+  }
   return (
     <>
       <TableRow>
@@ -55,13 +74,16 @@ function CabinRow({ cabin }) {
         <Price>{formatCurrency(cabin.regularPrice)}</Price>
         <Discount>{formatCurrency(cabin.discount)}</Discount>
         <div>
+          <button onClick={handleDuplicate}>
+            <HiDuplicate />
+          </button>
           <button onClick={() => deleteCabin(cabin.id)} disabled={isLoading}>
             delete
           </button>
           <button onClick={() => setFormOpen(!isFormOpen)}>edit</button>
         </div>
+        {isFormOpen && <CreateCabinForm cabinToEdit={cabin} />}
       </TableRow>
-      {isFormOpen && <CreateCabinForm cabinToEdit={cabin} />}
     </>
   );
 }

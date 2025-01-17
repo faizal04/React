@@ -1,4 +1,6 @@
+import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
+// import ModalCabin from "../features/cabins/ModalCabin";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -11,7 +13,7 @@ const StyledModal = styled.div`
   padding: 3.2rem 4rem;
   transition: all 0.5s;
 `;
-
+//eslint-disable-next-line
 const Overlay = styled.div`
   position: fixed;
   top: 0;
@@ -23,7 +25,7 @@ const Overlay = styled.div`
   z-index: 1000;
   transition: all 0.5s;
 `;
-
+//eslint-disable-next-line
 const Button = styled.button`
   background: none;
   border: none;
@@ -48,3 +50,22 @@ const Button = styled.button`
     color: var(--color-grey-500);
   }
 `;
+//eslint-disable-next-line
+function Modal({ children, close }) {
+  return (
+    <Overlay>
+      <StyledModal>
+        <Button
+          onClick={() => {
+            close(false);
+          }}
+        >
+          <HiXMark />
+        </Button>
+        {children}
+      </StyledModal>
+    </Overlay>
+  );
+}
+
+export default Modal;
